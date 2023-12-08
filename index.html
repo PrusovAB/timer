@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Создаем страницу с кнопками и самом таймером -->
+<body>
+    <div class="container">
+        <div class="counter">
+            <div class="timer">TIMER</div>
+            <div id="showTime" class="timer">00:00:00</div>
+            <button id="startButton">start</button>
+            <button id="stopButton">stop</button>
+            <button id="resetButton">reset</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    // Объявляем переменные
+    let showTime = document.getElementById('showTime');
+    let start = document.getElementById('startButton');
+    let stopTimer = document.getElementById('stopButton');
+    let reset = document.getElementById('resetButton');
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+    let time;
+
+// это функция, которая двигает таймер и правильно считает время
+    function startCount() {
+        seconds++;
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+
+
+    }
+// это функция, которая меняет значение таймера и снова запускает таймер
+    function add() {
+        startCount();
+        showTime.textContent = (hours > 9 ? hours : "0" + hours)
+            + ":" + (minutes > 9 ? minutes : "0" + minutes)
+            + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        timer();
+    }
+
+// это функуция, которая запускает интервал 1с, запускает обновление, которое запускает 
+// отсчет секунд для отображения
+    function timer() {
+        time = setTimeout(add, 1000);
+    }
+
+// тут мы стартуем таймер и делаем кнопку недоступной до нажатия других, чтобы избежать 
+// конфликта и одновременного запуска разных таймеров из за замыканий
+    start.onclick = function () {
+        timer();
+        start.disabled = true;
+    }
+// Тут мы останавливаем таймер и делаем кнопку запуска снова доступной
+    stopTimer.onclick = function () {
+        clearTimeout(time);
+        start.disabled = false;
+    }
+// а тут обнуляем сам таймер
+    reset.onclick = function () {
+        showTime.textContent = "00:00:00";
+        seconds = 0; minutes = 0; hours = 0;
+        start.disabled = false;
+    }
+</script>
+
+</html>
